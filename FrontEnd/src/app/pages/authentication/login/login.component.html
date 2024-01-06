@@ -40,15 +40,13 @@
       >
         <div class="row justify-content-center w-100">
           <div class="col-lg-9 max-width-form">
-            <h4 class="f-w-700 f-s-24 m-0">Welcome to Flexy</h4>
-            <span class="d-block f-w-500 d-block m-t-10"
-              >New to Flexy?
-              <a
-                [routerLink]="['/authentication/register']"
-                class="text-decoration-none text-accent f-w-500 f-s-14"
-              >
-                Create an account</a
-              >
+            <h4 class="f-w-700 f-s-24 m-0">Welcome to My Startup Application</h4>
+            <span class="d-block f-w-500 d-block m-t-10">
+              New to Startup Application?
+              <a [routerLink]="['/authentication/register']"
+                 class="text-decoration-none text-accent f-w-500 f-s-14">
+                Create an account
+              </a>
             </span>
 
             <form class="m-t-30" [formGroup]="form" (ngSubmit)="submit()">
