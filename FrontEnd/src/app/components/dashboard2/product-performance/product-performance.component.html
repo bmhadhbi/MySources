@@ -1,0 +1,59 @@
+<mat-card class="cardWithShadow">
+  <mat-card-header class="d-sm-flex">
+    <div class="m-r-auto">
+      <mat-card-title class="m-0">Products Performance</mat-card-title>
+    </div>
+    <div class="d-flex align-items-center">
+      <div class="d-flex align-items-center text-primary">
+        <i-tabler name="circle-filled" class="icon-12 d-flex"></i-tabler>
+        <div class="m-l-12 d-flex">
+          <span class="f-s-14">Expence</span>
+        </div>
+      </div>
+      <div class="d-flex m-l-16 align-items-center text-accent">
+        <i-tabler name="circle-filled" class="icon-12 d-flex"></i-tabler>
+        <div class="m-l-12 d-flex">
+          <span class="f-s-14">Budget</span>
+        </div>
+      </div>
+    </div>
+  </mat-card-header>
+  <mat-card-content class="p-32">
+    <div class="row">
+      <div class="col-sm-4">
+        <h4 class="f-s-24 f-w-500 m-b-6 m-t-25">$93,438.78</h4>
+        <h6 class="mat-subtitle-2 m-b-6 f-w-500">Budget</h6>
+
+        <h4 class="f-s-24 f-w-500 m-b-6 m-t-25">$32,839</h4>
+        <h6 class="mat-subtitle-2 m-b-30 f-w-500">Expense</h6>
+        <div class="m-b-20 d-flex flex-column">
+          <apx-chart
+            [series]="ProductChartOption.series"
+            [dataLabels]="ProductChartOption.dataLabels"
+            [chart]="ProductChartOption.chart"
+            [stroke]="ProductChartOption.stroke"
+            [tooltip]="ProductChartOption.tooltip"
+          ></apx-chart>
+        </div>
+        <button mat-flat-button color="accent">Download Report</button>
+      </div>
+      <div class="col-sm-8">
+        <apx-chart
+        [series]="ExpanceProductChartOption.series"
+        [dataLabels]="ExpanceProductChartOption.dataLabels"
+        [chart]="ExpanceProductChartOption.chart"
+        [fill]="ExpanceProductChartOption.fill"
+        [plotOptions]="ExpanceProductChartOption.plotOptions"
+        [grid]="ExpanceProductChartOption.grid"
+        [xaxis]="ExpanceProductChartOption.xaxis"
+        [yaxis]="ExpanceProductChartOption.yaxis"
+        [stroke]="ExpanceProductChartOption.stroke"
+        [stroke]="ExpanceProductChartOption.stroke"
+        [dataLabels]="ExpanceProductChartOption.dataLabels"
+        [tooltip]="ExpanceProductChartOption.tooltip"
+        [legend]="ExpanceProductChartOption.legend"
+      ></apx-chart>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
