@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyEFApi", "MyEFApi.csproj", "{E610B49F-CB83-453F-8EF1-BFB8CEF543B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyEFApi", "MyEFApi\MyEFApi.csproj", "{E610B49F-CB83-453F-8EF1-BFB8CEF543B1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAL", "..\DAL\DAL.csproj", "{C9223C8F-CCCA-4A6E-90BA-D37919DDF8E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAL", "DAL\DAL.csproj", "{C9223C8F-CCCA-4A6E-90BA-D37919DDF8E5}"
 EndProject
-Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "FrontEnd", "..\FrontEnd\FrontEnd.esproj", "{3CD44E3D-83C9-4D76-828D-A667DCCD827D}"
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "FrontEnd", "FrontEnd\FrontEnd.esproj", "{3CD44E3D-83C9-4D76-828D-A667DCCD827D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

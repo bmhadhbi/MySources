@@ -4,6 +4,7 @@ import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } 
 import { Router, RouterModule } from '@angular/router';
 import { MaterialModule } from '../../../material.module';
 import { NgIf } from '@angular/common';
+import { AccountService } from '../../../services/account.service';
 
 @Component({
   selector: 'app-forgot',
@@ -14,7 +15,11 @@ import { NgIf } from '@angular/common';
 export class AppForgotPasswordComponent {
   options = this.settings.getOptions();
 
-  constructor(private settings: CoreService, private router: Router) {}
+  constructor(
+    private settings: CoreService,
+    private accountService: AccountService,
+    private router: Router) {
+  }
 
   form = new FormGroup({
     email: new FormControl('', [Validators.required]),
@@ -25,7 +30,11 @@ export class AppForgotPasswordComponent {
   }
 
   submit() {
+
+    this.accountService.getRecoverPasswordEndpoint(this.form.value.email ?? 'bechir.mhadhbi@gmail.com')
+      .subscribe({ next: () => { }, error: error => { } });
+    //this.accountService.getRecoverPasswordEndpoint(this.form.value.email ?? 'bechir.mhadhbi@gmail.com')
     // console.log(this.form.value);
-    this.router.navigate(['/dashboards/dashboard1']);
+    //this.router.navigate(['/dashboards/dashboard1']);
   }
 }
