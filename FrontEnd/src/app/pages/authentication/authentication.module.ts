@@ -14,13 +14,14 @@ import * as TablerIcons from 'angular-tabler-icons/icons';
 
 import { AuthenticationRoutes } from './authentication.routing';
 
-
 import { AppErrorComponent } from './error/error.component';
 import { AppMaintenanceComponent } from './maintenance/maintenance.component';
 import { AppForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { AppLoginComponent } from './login/login.component';
 import { AppRegisterComponent } from './register/register.component';
 import { AppLockscreenComponent } from './lockscreen/lockscreen.component';
+import { AppResetComponent } from './reset-password/reset-password.component';
+import { AppConfirmComponent } from './confirm-password/confirm-password.component';
 
 @NgModule({
   imports: [
@@ -34,13 +35,15 @@ import { AppLockscreenComponent } from './lockscreen/lockscreen.component';
     FormsModule,
     ReactiveFormsModule,
     TablerIconsModule.pick(TablerIcons),
-  
+
     AppErrorComponent,
     AppMaintenanceComponent,
     AppForgotPasswordComponent,
     AppLoginComponent,
     AppRegisterComponent,
-    AppLockscreenComponent
+    AppLockscreenComponent,
+    AppResetComponent,
+    AppConfirmComponent
   ],
 })
-export class AuthenticationModule {}
+export class AuthenticationModule { }

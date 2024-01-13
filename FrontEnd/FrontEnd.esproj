@@ -847,4 +847,7 @@
     <None Include=".angular\cache\16.0.2\babel-webpack\febb5e449b99ecd1d883ff19b8ce19eb66103624741cf317a50a41b96193b775.json" />
     <None Include=".angular\cache\16.0.2\babel-webpack\ffc4309446a5dfa879b5e33d2f88467ca4a6e60e6aa59e5e49c451f93ff01f3f.json" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="src\app\pages\authentication\confirm-password\confirm-password.component.ts~RFa24aff.TMP" />
+  </ItemGroup>
 </Project>

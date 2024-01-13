@@ -6,11 +6,13 @@ import { AppForgotPasswordComponent } from './forgot-password/forgot-password.co
 import { AppLoginComponent } from './login/login.component';
 import { AppRegisterComponent } from './register/register.component';
 import { AppLockscreenComponent } from './lockscreen/lockscreen.component';
+import { AppResetComponent } from './reset-password/reset-password.component';
+import { AppConfirmComponent } from './confirm-password/confirm-password.component';
 
 export const AuthenticationRoutes: Routes = [
   {
     path: '',
-    children: [      
+    children: [
       {
         path: 'error',
         component: AppErrorComponent,
@@ -24,6 +26,10 @@ export const AuthenticationRoutes: Routes = [
         component: AppForgotPasswordComponent,
       },
       {
+        path: 'confirm',
+        component: AppConfirmComponent,
+      },
+      {
         path: 'login',
         component: AppLoginComponent,
       },
@@ -34,6 +40,10 @@ export const AuthenticationRoutes: Routes = [
       {
         path: 'lockscreen',
         component: AppLockscreenComponent,
+      },
+      {
+        path: 'reset',
+        component: AppResetComponent,
       },
     ],
   },

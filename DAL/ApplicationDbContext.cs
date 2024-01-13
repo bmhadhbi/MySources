@@ -7,7 +7,7 @@ namespace DAL
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
-        private string connectionString = "server=localhost;user=root;database=quickapp;password=aze123";
+        private string connectionString = "server=localhost;user=root;database=MyEFApi;password=aze123";
 
         public ApplicationDbContext()
         {
@@ -33,6 +33,7 @@ namespace DAL
             builder.Entity<IdentityUserRole<string>>().HasKey("UserId", "RoleId");
             builder.Entity<ApplicationUser>().HasMany(u => u.Claims).WithOne().HasForeignKey(c => c.UserId).IsRequired().OnDelete(DeleteBehavior.Cascade);
             builder.Entity<ApplicationUser>().HasMany(u => u.Roles).WithOne().HasForeignKey(r => r.UserId).IsRequired().OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<ApplicationUser>().HasIndex(u => u.Email).IsUnique();
 
             builder.Entity<ApplicationRole>().HasMany(r => r.Claims).WithOne().HasForeignKey(c => c.RoleId).IsRequired().OnDelete(DeleteBehavior.Cascade);
             builder.Entity<ApplicationRole>().HasMany(r => r.Users).WithOne().HasForeignKey(r => r.RoleId).IsRequired().OnDelete(DeleteBehavior.Cascade);

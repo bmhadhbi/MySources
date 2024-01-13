@@ -32,7 +32,7 @@ export class AppForgotPasswordComponent {
   submit() {
 
     this.accountService.getRecoverPasswordEndpoint(this.form.value.email ?? 'bechir.mhadhbi@gmail.com')
-      .subscribe({ next: () => { }, error: error => { } });
+      .subscribe({ next: () => { alert('a password initialization email has been sent to you. please look at your mail box to set a new password') }, error: error => { alert('an error has occured')} });
     //this.accountService.getRecoverPasswordEndpoint(this.form.value.email ?? 'bechir.mhadhbi@gmail.com')
     // console.log(this.form.value);
     //this.router.navigate(['/dashboards/dashboard1']);

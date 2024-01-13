@@ -40,7 +40,7 @@
       >
         <div class="row justify-content-center w-100">
           <div class="col-lg-9 max-width-form">
-            <h4 class="f-w-700 f-s-24 m-0">Welcome to Flexy</h4>
+            <h4 class="f-w-700 f-s-24 m-0">Welcome to My Application</h4>
             <span class="d-block f-w-500 d-block m-t-10"
               >Already have an Account?
               <a
@@ -52,84 +52,83 @@
             </span>
 
             <form class="m-t-30" [formGroup]="form" (ngSubmit)="submit()">
-              <mat-form-field
-                appearance="outline"
-                class="w-100"
-                color="primary"
-              >
+              <mat-form-field appearance="outline"
+                              class="w-100"
+                              color="primary">
                 <mat-label>Name</mat-label>
                 <input matInput formControlName="uname" />
-                <mat-hint
-                  *ngIf="f['uname'].touched && f['uname'].invalid"
-                  class="m-b-16 error-msg"
-                >
-                  <div
-                    class="text-error"
-                    *ngIf="f['uname'].errors && f['uname'].errors['required']"
-                  >
+                <mat-hint *ngIf="f['uname'].touched && f['uname'].invalid"
+                          class="m-b-16 error-msg">
+                  <div class="text-error"
+                       *ngIf="f['uname'].errors && f['uname'].errors['required']">
                     Name is required.
                   </div>
-                  <div
-                    class="text-error"
-                    *ngIf="f['uname'].errors && f['uname'].errors['minlength']"
-                  >
+                  <div class="text-error"
+                       *ngIf="f['uname'].errors && f['uname'].errors['minlength']">
                     Name should be 6 character.
                   </div>
                 </mat-hint>
               </mat-form-field>
               <!-- email -->
 
-              <mat-form-field
-                appearance="outline"
-                class="w-100"
-                color="primary"
-              >
+              <mat-form-field appearance="outline"
+                              class="w-100"
+                              color="primary">
                 <mat-label>Email Address</mat-label>
                 <input matInput type="email" formControlName="email" />
-                <mat-hint
-                  *ngIf="f['email'].touched && f['email'].invalid"
-                  class="m-b-16 error-msg"
-                >
-                  <div
-                    class="text-error"
-                    *ngIf="f['email'].errors && f['email'].errors['required']"
-                  >
+                <mat-hint *ngIf="f['email'].touched && f['email'].invalid"
+                          class="m-b-16 error-msg">
+                  <div class="text-error"
+                       *ngIf="f['email'].errors && f['email'].errors['required']">
                     Email is required.
                   </div>
                 </mat-hint>
               </mat-form-field>
               <!-- password -->
 
-              <mat-form-field
-                appearance="outline"
-                class="w-100"
-                color="primary"
-              >
+              <mat-form-field appearance="outline"
+                              class="w-100"
+                              color="primary">
                 <mat-label>Password</mat-label>
                 <input matInput type="password" formControlName="password" />
-                <mat-hint
-                  *ngIf="f['password'].touched && f['password'].invalid"
-                  class="m-b-16 error-msg"
-                >
-                  <div
-                    class="text-error"
-                    *ngIf="
-                      f['password'].errors && f['password'].errors['required']
-                    "
-                  >
+                <mat-hint *ngIf="f['password'].touched && f['password'].invalid"
+                          class="m-b-16 error-msg">
+                  <div class="text-error"
+                       *ngIf="f['password'].errors && f['password'].errors['required']">
                     Password is required.
                   </div>
                 </mat-hint>
               </mat-form-field>
+              <mat-form-field appearance="outline"
+                              class="w-100"
+                              color="primary">
+                <mat-label>Confirm Password</mat-label>
+                <input matInput type="password" formControlName="confirmPassword" />
+                <mat-hint *ngIf="f['confirmPassword'].touched"
+                          class="m-b-16 error-msg">
+                  <div class="text-error"
+                       *ngIf="f['confirmPassword'].errors && f['confirmPassword'].errors['required']">
+                    Confirm Password is required.
+                  </div>
+                  <div class="text-error"
+                       *ngIf="f['confirmPassword'].value != '' && f['confirmPassword'].value != f['password'].value">
+                    passwords are not the same
+                  </div>
+                </mat-hint>
+              </mat-form-field>
 
-              <button
-                mat-flat-button
-                color="primary"
-                class="w-100"
-                [disabled]="!form.valid"
-              >
+              <button mat-flat-button
+                      color="primary"
+                      class="w-100"
+                      [disabled]="!form.valid">
                 Sign Up
               </button>
+              <a [routerLink]="['/authentication/login']"
+                 mat-stroked-button
+                 color="primary"
+                 class="w-100 m-t-8">
+                Back to Login
+              </a>
               <!-- input -->
             </form>
 

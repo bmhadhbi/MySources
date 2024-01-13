@@ -9,12 +9,12 @@ import { AccountService } from '../../../services/account.service';
 import { UserEdit } from '../../../models/user-edit.model';
 
 @Component({
-  selector: 'app-register',
+  selector: 'app-confirm',
   standalone: true,
   imports: [RouterModule, MaterialModule, FormsModule, ReactiveFormsModule, NgIf, FeatherModule],
-  templateUrl: './register.component.html',
+  templateUrl: './confirm-password.component.html',
 })
-export class AppRegisterComponent {
+export class AppConfirmComponent {
   options = this.settings.getOptions();
 
   constructor(
@@ -35,32 +35,30 @@ export class AppRegisterComponent {
 
   submit() {
     // console.log(this.form.value);
-    if (this.form.status != 'VALID') {
-      // Causes validation to update.
-      alert('form is not valid');
-      return;
-    }
+    //if (this.form.status != 'VALID') {
+    //  // Causes validation to update.
+    //  alert('form is not valid');
+    //  return;
+    //}
 
-    this.accountService.newUser(this.getNewUser())
-      .subscribe({
-        next: () => { alert('Your account has benn created successfully. a confirmation mail has been sent, please use it to validate your account'); },
-        error: error => {
-          console.log(error)
-          alert("error has occured");
-        }
-      });
+    //this.accountService.newUser(this.getNewUser())
+    //  .subscribe({
+    //    next: () => { this.router.navigate(['/dashboards/dashboard1']); },
+    //    error: error => {
+    //      console.log(error)
+    //      alert("error occured");
+    //    }
+    //  });
   }
 
   getNewUser(): UserEdit {
     const formModel = this.form.value;
     const newUser = new UserEdit();
 
-    newUser.userName = formModel.uname ?? '';
     newUser.email = formModel.email ?? '';
     newUser.currentPassword = formModel.password ?? '';
     newUser.newPassword = formModel.password ?? '';
     newUser.roles = ["admin"];
-
 
     return newUser;
   }

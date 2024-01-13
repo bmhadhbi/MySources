@@ -1,4 +1,8 @@
 using DAL;
+using DAL.Core;
+using DAL.Core.Interfaces;
+using DAL.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MyEFApi.Helpers;
 
@@ -44,13 +48,21 @@ static void ConfigureServices(WebApplicationBuilder builder)
                .AllowAnyMethod()
                .AllowAnyHeader();
     }));
+    // Add external authentication providers
+    builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
+              .AddEntityFrameworkStores<ApplicationDbContext>()
+              .AddDefaultTokenProviders();
 
     builder.Services.AddScoped<IEmailSender, EmailSender>();
+
+    builder.Services.AddScoped<IAccountManager, AccountManager>();
 
     builder.Services.AddControllers();
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
+
+    builder.Services.AddAutoMapper(typeof(Program));
 
     //Email Templates
     EmailTemplates.Initialize(builder.Environment);
