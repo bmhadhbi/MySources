@@ -1,12 +1,14 @@
 import { Component } from '@angular/core';
 import { CoreService } from 'src/app/services/core.service';
 import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
 import { MaterialModule } from '../../../material.module';
 import { NgIf } from '@angular/common';
 import { FeatherModule } from 'angular-feather';
 import { AccountService } from '../../../services/account.service';
 import { UserEdit } from '../../../models/user-edit.model';
+import { AppDialogInfoComponent } from '../../dialogs/dialog-info.component';
+import { MatDialog } from '@angular/material/dialog';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -19,8 +21,8 @@ export class AppRegisterComponent {
 
   constructor(
     private settings: CoreService,
-    private router: Router,
-    private accountService: AccountService) { }
+    private accountService: AccountService,
+    public dialog: MatDialog) { }
 
   form = new FormGroup({
     uname: new FormControl('', [Validators.required, Validators.minLength(6)]),
@@ -34,19 +36,18 @@ export class AppRegisterComponent {
   }
 
   submit() {
-    // console.log(this.form.value);
     if (this.form.status != 'VALID') {
-      // Causes validation to update.
-      alert('form is not valid');
+      this.openDialog('0ms', '0ms', 'Error!', 'form is not valid', 'Ok', '')
       return;
     }
 
     this.accountService.newUser(this.getNewUser())
       .subscribe({
-        next: () => { alert('Your account has benn created successfully. a confirmation mail has been sent, please use it to validate your account'); },
+        next: () => {
+          this.openDialog('0ms', '0ms', 'Infos!', 'Your account has been created successfully. A confirmation mail has been sent, please validate your account', 'Ok', '')
+        },
         error: error => {
-          console.log(error)
-          alert("error has occured");
+          this.openDialog('0ms', '0ms', 'Error!', 'error has occurred', 'Ok', '')
         }
       });
   }
@@ -61,7 +62,27 @@ export class AppRegisterComponent {
     newUser.newPassword = formModel.password ?? '';
     newUser.roles = ["admin"];
 
-
     return newUser;
+  }
+
+  openDialog(
+    enterAnimationDuration: string,
+    exitAnimationDuration: string,
+    header,
+    message,
+    okText,
+    otherText
+  ): void {
+    this.dialog.open(AppDialogInfoComponent, {
+      width: '290px',
+      enterAnimationDuration,
+      exitAnimationDuration,
+      data: {
+        header: header,
+        message: message,
+        okButtonText: okText,
+        otherButtonText: otherText
+      }
+    });
   }
 }

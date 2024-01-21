@@ -18,12 +18,14 @@ namespace MyEFApi.Controllers
         private readonly IEmailSender _emailSender;
         private readonly IMapper _mapper;
         private readonly IAccountManager _accountManager;
+        private readonly IHttpContextAccessor _httpAccessor;
 
-        public AccountController(IEmailSender emailSender, IMapper mapper, IAccountManager accountManager)
+        public AccountController(IEmailSender emailSender, IMapper mapper, IAccountManager accountManager, IHttpContextAccessor httpAccessor)
         {
             _emailSender = emailSender;
             _mapper = mapper;
             _accountManager = accountManager;
+            _httpAccessor = httpAccessor;
         }
 
         // GET: api/<AccountController>
@@ -58,6 +60,17 @@ namespace MyEFApi.Controllers
         {
         }
 
+        [HttpPost("login")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> Login(UserCredentials user)
+        {
+            var authResult = await _accountManager.LoginWithPassword(user.UsernameOrEmail, user.Password);
+            var userVm = _mapper.Map<UserRequest>(authResult.Item2);
+
+            return Ok(new { isAuthenticated = authResult.Item1, user = userVm });
+        }
+
         [HttpPost("public/recoverpassword")]
         [AllowAnonymous]
         [ProducesResponseType(202)]
@@ -82,7 +95,7 @@ namespace MyEFApi.Controllers
                     }
 
                     var code = await _accountManager.GeneratePasswordResetTokenAsync(appUser);
-                    var callbackUrl = $"http://localhost:4200/authentication/reset?code={code}";
+                    var callbackUrl = $"http://localhost:4200/authentication/reset?low={code}";
                     //var callbackUrl = $"{Request.Scheme}://{Request.Host}/authentication/reset?code={code}";
 
                     try
@@ -189,6 +202,25 @@ namespace MyEFApi.Controllers
             }
 
             return BadRequest(ModelState);
+        }
+
+        [HttpPut("public/confirmemail")]
+        [AllowAnonymous]
+        [ProducesResponseType(202)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> ConfirmEmail(string userId, string code)
+        {
+            var appUser = await _accountManager.GetUserByIdAsync(userId);
+
+            if (appUser == null)
+                return NotFound(userId);
+
+            var result = await _accountManager.ConfirmEmailAsync(appUser, code);
+            if (!result.Succeeded)
+                return BadRequest($"Confirming email failed for user \"{appUser.UserName}\". Errors: {string.Join(", ", result.Errors)}");
+
+            return Accepted();
         }
 
         private void AddError(IEnumerable<string> errors, string key = "")

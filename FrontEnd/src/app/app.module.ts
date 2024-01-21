@@ -26,13 +26,14 @@ import { FilterPipe } from './pipe/filter.pipe';
 
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { AppDialogInfoComponent } from './pages/dialogs/dialog-info.component';
 
 export function HttpLoaderFactory(http: HttpClient): any {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
 @NgModule({
-  declarations: [AppComponent, BlankComponent, FilterPipe],
+  declarations: [AppComponent, BlankComponent, FilterPipe, AppDialogInfoComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -56,4 +57,4 @@ export function HttpLoaderFactory(http: HttpClient): any {
   exports: [TablerIconsModule],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

@@ -5,6 +5,8 @@ using DAL.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MyEFApi.Helpers;
+using MyEFApi.Hubs;
+using MyEFApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +30,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<ChatHub>("/hubs/chat");
 
 app.Run();
 
@@ -56,6 +60,10 @@ static void ConfigureServices(WebApplicationBuilder builder)
     builder.Services.AddScoped<IEmailSender, EmailSender>();
 
     builder.Services.AddScoped<IAccountManager, AccountManager>();
+    builder.Services.AddHttpContextAccessor();
+    builder.Services.AddSingleton<ChatService>();
+    builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+    builder.Services.AddSignalR();
 
     builder.Services.AddControllers();
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

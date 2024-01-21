@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { CoreService } from 'src/app/services/core.service';
-import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { MaterialModule } from '../../../material.module';
 import { NgIf } from '@angular/common';
 import { FeatherModule } from 'angular-feather';
 import { AccountService } from '../../../services/account.service';
-import { UserEdit } from '../../../models/user-edit.model';
+import { Utilities } from '../../../services/utilities';
 
 @Component({
   selector: 'app-confirm',
@@ -16,50 +16,33 @@ import { UserEdit } from '../../../models/user-edit.model';
 })
 export class AppConfirmComponent {
   options = this.settings.getOptions();
-
+  message: string;
   constructor(
     private settings: CoreService,
-    private router: Router,
+    private route: ActivatedRoute,
     private accountService: AccountService) { }
 
-  form = new FormGroup({
-    uname: new FormControl('', [Validators.required, Validators.minLength(6)]),
-    email: new FormControl('', [Validators.required]),
-    password: new FormControl('', [Validators.required]),
-    confirmPassword: new FormControl('', [Validators.required])
-  });
+  ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      const loweredParams: any = Utilities.GetObjectWithLoweredPropertyNames(params);
+      const userId = loweredParams.hight;
+      const code = loweredParams.low;
 
-  get f() {
-    return this.form.controls;
+      //if (!userId || !code) {
+      //  alert(userId + ' ' + code);
+      //  //this.router.navigate(['/authentication/login']);
+      //} else {
+      this.confirmEmail(userId, code);
+      //}
+    });
   }
 
-  submit() {
-    // console.log(this.form.value);
-    //if (this.form.status != 'VALID') {
-    //  // Causes validation to update.
-    //  alert('form is not valid');
-    //  return;
-    //}
-
-    //this.accountService.newUser(this.getNewUser())
-    //  .subscribe({
-    //    next: () => { this.router.navigate(['/dashboards/dashboard1']); },
-    //    error: error => {
-    //      console.log(error)
-    //      alert("error occured");
-    //    }
-    //  });
-  }
-
-  getNewUser(): UserEdit {
-    const formModel = this.form.value;
-    const newUser = new UserEdit();
-
-    newUser.email = formModel.email ?? '';
-    newUser.currentPassword = formModel.password ?? '';
-    newUser.newPassword = formModel.password ?? '';
-    newUser.roles = ["admin"];
-
-    return newUser;
+  confirmEmail(userId: string, code: string) {
+    //this.alertService.startLoadingMessage('', 'Confirming account email...');
+    this.accountService.confirmUserAccount(userId, code)
+      .subscribe({
+        next: _ => this.message = "Your account has been confirmed. You can log in by back to login page",
+        error: error => this.message = "We were unable to confirm the email for user"
+      });
   }
 }

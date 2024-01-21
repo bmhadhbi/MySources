@@ -5,6 +5,8 @@ import { Router, RouterModule } from '@angular/router';
 import { MaterialModule } from '../../../material.module';
 import { NgIf } from '@angular/common';
 import { AccountService } from '../../../services/account.service';
+import { MatDialog } from '@angular/material/dialog';
+import { AppDialogInfoComponent } from '../../dialogs/dialog-info.component';
 
 @Component({
   selector: 'app-forgot',
@@ -18,7 +20,7 @@ export class AppForgotPasswordComponent {
   constructor(
     private settings: CoreService,
     private accountService: AccountService,
-    private router: Router) {
+    public dialog: MatDialog) {
   }
 
   form = new FormGroup({
@@ -30,11 +32,31 @@ export class AppForgotPasswordComponent {
   }
 
   submit() {
+    this.accountService.recoverPassword(this.form.value.email ?? 'bechir.mhadhbi@gmail.com')
+      .subscribe({
+        next: () => { this.openDialog('0ms', '0ms', 'Infos!', 'A password initialization mail has been sent to you.please look at your mail box to set a new password','Ok','') },
+        error: error => { this.openDialog('0ms', '0ms','Error!','An error has occurred','Ok','') }
+      });
+  }
 
-    this.accountService.getRecoverPasswordEndpoint(this.form.value.email ?? 'bechir.mhadhbi@gmail.com')
-      .subscribe({ next: () => { alert('a password initialization email has been sent to you. please look at your mail box to set a new password') }, error: error => { alert('an error has occured')} });
-    //this.accountService.getRecoverPasswordEndpoint(this.form.value.email ?? 'bechir.mhadhbi@gmail.com')
-    // console.log(this.form.value);
-    //this.router.navigate(['/dashboards/dashboard1']);
+  openDialog(
+    enterAnimationDuration: string,
+    exitAnimationDuration: string,
+    header,
+    message,
+    okText,
+    otherText
+   ): void {
+    this.dialog.open(AppDialogInfoComponent, {
+      width: '290px',
+      enterAnimationDuration,
+      exitAnimationDuration,
+      data: {
+        header: header,
+        message: message,
+        okButtonText: okText,
+        otherButtonText: otherText
+      }
+    });
   }
 }

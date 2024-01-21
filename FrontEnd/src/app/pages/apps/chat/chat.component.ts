@@ -1,5 +1,12 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { messages } from './chat-data';
+import { ChatService } from '../../../services/chat.service';
+import { MatDialog } from '@angular/material/dialog';
+import { AppDialogInfoComponent } from '../../dialogs/dialog-info.component';
+import { User } from '../../../models/user.model';
+import { ChatMessage, ChatUser } from '../../../models/chat/chat.model';
+import { LocalService } from '../../../services/local-service';
+import { DBkeys } from '../../../services/db-keys';
 
 @Component({
   selector: 'app-chat',
@@ -7,17 +14,24 @@ import { messages } from './chat-data';
   styleUrls: ['./chat.component.scss'],
 })
 export class AppChatComponent {
+  user: any;
+
   sidePanelOpened = true;
   msg = '';
 
   // MESSAGE
   selectedMessage: any;
+  selectedUser: ChatUser;
+  chatUsers: ChatUser[];
+  serachText: string = '';
 
-  public messages: Array<any> = messages;
+  public messages: Array<any> = [];// messages;
   // tslint:disable-next-line - Disables all
   // messages: Object[] = messages;
 
-  constructor() {
+  constructor(public chatService: ChatService,
+    private localService: LocalService,
+    public dialog: MatDialog) {
     this.selectedMessage = this.messages[0];
   }
 
@@ -27,23 +41,75 @@ export class AppChatComponent {
   isOver(): boolean {
     return window.matchMedia(`(max-width: 960px)`).matches;
   }
+    
+  onSelect(user: ChatUser): void {
+    this.selectedUser = user;
+    this.chatService.getUserMessages(user.from, this.user.userName)
 
-  // tslint:disable-next-line - Disables all
-  onSelect(message: Object[]): void {
-    this.selectedMessage = message;
+    this.selectedMessage = messages[0];
+  }
+
+  async ngOnInit() {
+    this.user = JSON.parse(this.localService.getData(DBkeys.CurrentUser) ?? "");
+    this.user.fullName = this.user.userName;
+    this.user.jobTitle = "Développeur Informatique";
+    this.chatService.getChatUsers(this.user.userName);
+    this.selectedUser = this.chatService.chatUsers[0];
+    if (this.user != "") {
+      this.chatService.registerUser(this.user)
+        .subscribe({
+          next: () => {
+            this.chatService.createChatConnection();
+          },
+          error: error => { this.openDialog('0ms', '0ms', 'Error!', error.error, 'Ok', '') }
+        });
+    }   
+  }
+
+  search() {
+    this.chatService.getChatUsers(this.user.userName);
+    this.chatService.chatUsers = this.chatService.chatUsers.filter(x => x.from.toLowerCase().includes(this.serachText.toLowerCase()));
+    var defaultUser: ChatUser = {from:'',photo:'',subject:''};
+    this.selectedUser = this.chatService.chatUsers.length > 0 ? this.chatService.chatUsers[0] : defaultUser;
+    this.chatService.getUserMessages(this.selectedUser.from, this.user.userName)
+  }
+
+  isOnline(user) {
+    return this.chatService.onlineUsers.filter(x => x == user)?.length > 0;
   }
 
   OnAddMsg(): void {
     this.msg = this.myInput.nativeElement.value;
 
     if (this.msg !== '') {
-      this.selectedMessage.chat.push({
-        type: 'even',
-        msg: this.msg,
-        date: new Date(),
-      });
+      //this.selectedUser.chat.push({
+      //  type: 'even',
+      //  msg: this.msg,
+      //  date: new Date(),
+      //});
+      this.chatService.sendMessage(this.user.userName, this.selectedUser.from, this.msg);
     }
 
     this.myInput.nativeElement.value = '';
+  }
+  openDialog(
+    enterAnimationDuration: string,
+    exitAnimationDuration: string,
+    header,
+    message,
+    okText,
+    otherText
+  ): void {
+    this.dialog.open(AppDialogInfoComponent, {
+      width: '290px',
+      enterAnimationDuration,
+      exitAnimationDuration,
+      data: {
+        header: header,
+        message: message,
+        okButtonText: okText,
+        otherButtonText: otherText
+      }
+    });
   }
 }

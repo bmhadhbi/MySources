@@ -55,7 +55,7 @@
               <mat-form-field appearance="outline"
                               class="w-100"
                               color="primary">
-                <mat-label>Name</mat-label>
+                <mat-label>Login</mat-label>
                 <input matInput formControlName="uname" />
                 <mat-hint *ngIf="f['uname'].touched && f['uname'].invalid"
                           class="m-b-16 error-msg">
@@ -120,7 +120,7 @@
               <button mat-flat-button
                       color="primary"
                       class="w-100"
-                      [disabled]="!form.valid">
+                      [disabled]="!form.valid || f['confirmPassword'].value != f['password'].value">
                 Sign Up
               </button>
               <a [routerLink]="['/authentication/login']"

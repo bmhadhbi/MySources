@@ -63,6 +63,12 @@ namespace MyEFApi.ViewModels
         public string Configuration { get; set; }
     }
 
+    public class UserCredentials
+    {
+        public string UsernameOrEmail { get; set; }
+        public string Password { get; set; }
+    }
+
     public abstract class UserBaseRequest
     {
         public virtual void SanitizeModel()

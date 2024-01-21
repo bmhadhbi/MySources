@@ -6,8 +6,9 @@ import { MaterialModule } from '../../../material.module';
 import { NgIf } from '@angular/common';
 import { FeatherModule } from 'angular-feather';
 import { AccountService } from '../../../services/account.service';
-import { UserEdit } from '../../../models/user-edit.model';
 import { Utilities } from '../../../services/utilities';
+import { AppDialogInfoComponent } from '../../dialogs/dialog-info.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-reset',
@@ -22,6 +23,7 @@ export class AppResetComponent {
     private route: ActivatedRoute,
     private settings: CoreService,
     private router: Router,
+    public dialog: MatDialog,
     private accountService: AccountService) { }
 
   form = new FormGroup({
@@ -33,9 +35,7 @@ export class AppResetComponent {
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       const loweredParams: any = Utilities.GetObjectWithLoweredPropertyNames(params);
-      this.resetCode = loweredParams.code;
-
-      this.resetCode = loweredParams.code;
+      this.resetCode = loweredParams.low;
 
       if (!this.resetCode) {
         this.router.navigate(['/authentication/login']);
@@ -48,28 +48,39 @@ export class AppResetComponent {
 
   submit() {
     if (this.form.status != 'VALID') {
-      // Causes validation to update.
-      alert('form is not valid');
+      this.openDialog('0ms', '0ms', 'Error!', 'form is not valid', 'Ok', '');
       return;
     }
 
-     
-      //this.alertService.startLoadingMessage('', 'Resetting password...');
+    //this.alertService.startLoadingMessage('', 'Resetting password...');
     const formModel = this.form.value;
-    this.accountService.resetPassword(formModel.email??'', formModel.password??'', this.resetCode)
-      .subscribe({ next: _ => { alert('Your password was successfully reset');  } , error: error => alert('An error was occured') });
-
+    this.accountService.resetPassword(formModel.email ?? '', formModel.password ?? '', this.resetCode)
+      .subscribe({
+        next: _ => {
+          this.openDialog('0ms', '0ms', 'Infos!', 'Your password was successfully reset', 'Ok', '');
+          this.router.navigate(['/authentication/login']);
+        }, error: error => { this.openDialog('0ms', '0ms', 'Error!', 'An error was occured', 'Ok', ''); }
+      });
   }
 
-  getNewUser(): UserEdit {
-    const formModel = this.form.value;
-    const newUser = new UserEdit();
-
-    newUser.email = formModel.email ?? '';
-    newUser.currentPassword = formModel.password ?? '';
-    newUser.newPassword = formModel.password ?? '';
-    newUser.roles = ["admin"];
-
-    return newUser;
+  openDialog(
+    enterAnimationDuration: string,
+    exitAnimationDuration: string,
+    header,
+    message,
+    okText,
+    otherText
+  ): void {
+    this.dialog.open(AppDialogInfoComponent, {
+      width: '290px',
+      enterAnimationDuration,
+      exitAnimationDuration,
+      data: {
+        header: header,
+        message: message,
+        okButtonText: okText,
+        otherButtonText: otherText
+      }
+    });
   }
 }

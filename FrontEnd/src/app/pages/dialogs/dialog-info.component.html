@@ -1,0 +1,10 @@
+<h5 mat-dialog-title class="mat-subtitle-1">{{data.header}}</h5>
+<div mat-dialog-content class="mat-subtitle-2 lh-16" align="center">
+  {{data.message}}
+</div>
+<div mat-dialog-actions class="p-24 p-t-0" align="end">
+  <button *ngIf="data.okButtonText != ''" mat-stroked-button color="warn" mat-dialog-close>{{data.okButtonText}}</button>
+  <button *ngIf="data.otherButtonText != ''" mat-flat-button color="primary" mat-dialog-close cdkFocusInitial>
+    {{data.otherButtonText}}
+  </button>
+</div>

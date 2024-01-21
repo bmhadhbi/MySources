@@ -387,5 +387,18 @@ namespace DAL.Core
         {
             return await _userManager.IsEmailConfirmedAsync(user);
         }
+
+        public async Task<(bool, ApplicationUser?)> LoginWithPassword(string login, string password)
+        {
+            var user = await _userManager.FindByEmailAsync(login);
+            if (user == null)
+                user = await _userManager.FindByNameAsync(login);
+            if (user == null)
+                return (false, null);
+            if (!user.EmailConfirmed)
+                return (false, null);
+
+            return (await _userManager.CheckPasswordAsync(user, password), user);
+        }
     }
 }

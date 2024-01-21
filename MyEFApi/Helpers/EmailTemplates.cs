@@ -54,7 +54,7 @@ namespace MyEFApi.Helpers
 
         public static string GetConfirmEmailCallbackUrl(HttpRequest httpRequest, string userId, string emailConfirmationToken)
         {
-            return $"http://localhost:4200/authentication/confirm?code={emailConfirmationToken}";
+            return $"http://localhost:4200/authentication/confirm?hight={userId}&low={emailConfirmationToken}";
             //return $"{httpRequest.Scheme}://{httpRequest.Host}/ConfirmEmail?userId={userId}&code={emailConfirmationToken}";
         }
 

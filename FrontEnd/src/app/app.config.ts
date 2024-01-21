@@ -17,7 +17,7 @@ export const defaults: AppSettings = {
   sidenavOpened: false,
   sidenavCollapsed: false,
   boxed: true,
-  horizontal: true,
+  horizontal: false,
   cardBorder: false,
   activeTheme: 'orange_theme',
   language: 'en-us',
