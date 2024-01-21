@@ -12,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AppDialogInfoComponent } from '../../dialogs/dialog-info.component';
 import { LocalService } from '../../../services/local-service';
 import { DBkeys } from '../../../services/db-keys';
+import { ChatService } from '../../../services/chat.service';
 
 @Component({
   selector: 'app-login',
@@ -26,7 +27,12 @@ export class AppLoginComponent {
     private router: Router,
     private accountService: AccountService,
     private localService: LocalService,
+    public chatService: ChatService,
     public dialog: MatDialog) {
+    var userName = this.localService.getData(DBkeys.CurrentUserName);
+    if (userName != null && userName.length > 0) {
+      chatService.disconnectUser(userName);
+    }
     this.localService.saveData(DBkeys.IsUserLoggedIn, "false");
     this.localService.saveData(DBkeys.CurrentUserName, '');
     this.localService.saveData(DBkeys.CurrentUser, JSON.stringify(""));

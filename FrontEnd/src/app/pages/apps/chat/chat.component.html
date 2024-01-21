@@ -66,10 +66,10 @@
                    class="rounded-circle" />
               <div class="m-l-16" style="width:100px">
                 <h3 class="f-w-600 mat-subtitle-1 f-s-16 lh-sm">
-                  {{ user?.from }}
+                  {{ substring(user.name) }}
                 </h3>
                 <p class="f-s-14 m-t-4 m-b-0">{{ user?.subject }}</p>
-              </div>
+              </div>           
               <div style="width:80px;"></div>
               <mat-icon *ngIf="isOnline(user.from)" align="right" class="material-icons color_green">account_circle</mat-icon>
               <mat-icon *ngIf="!isOnline(user.from)" align="right">account_circle</mat-icon>
@@ -90,7 +90,7 @@
              width="40"
              class="rounded-circle" />
         <div class="mat-subtitle-1 f-s-16 f-w-600 m-b-0 m-l-16">
-          {{ selectedUser?.from }}
+          {{ selectedUser?.name }}
         </div>
       </div>
       <button [matMenuTriggerFor]="moredd" class="m-l-auto" mat-icon-button>

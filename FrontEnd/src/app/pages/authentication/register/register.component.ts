@@ -26,6 +26,7 @@ export class AppRegisterComponent {
 
   form = new FormGroup({
     uname: new FormControl('', [Validators.required, Validators.minLength(6)]),
+    name: new FormControl('', [Validators.required, Validators.minLength(6)]),
     email: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required]),
     confirmPassword: new FormControl('', [Validators.required])
@@ -57,6 +58,7 @@ export class AppRegisterComponent {
     const newUser = new UserEdit();
 
     newUser.userName = formModel.uname ?? '';
+    newUser.fullName = formModel.name ?? '';
     newUser.email = formModel.email ?? '';
     newUser.currentPassword = formModel.password ?? '';
     newUser.newPassword = formModel.password ?? '';

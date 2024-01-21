@@ -32,6 +32,14 @@ namespace MyEFApi.Hubs
             await DisplayOnlineUsers();
         }
 
+        public async Task RemoveUserConnection(string name)
+        {
+            _chatService.RemoveUserFromList(name);
+            await DisplayOnlineUsers();
+        }
+
+
+
         private async Task DisplayOnlineUsers()
         {
             var onlineUsers = _chatService.GetOnlineUsers();

@@ -12,6 +12,7 @@ import { Message } from '../models/chat/message.model';
 })
 export class ChatService {
   get registerUserUrl() { return 'https://localhost:7217/api/chat/register-user'; }
+  get removeUserUrl() { return 'https://localhost:7217/api/chat/remove-user'; }
   protected get requestHeaders(): { headers: HttpHeaders | { [header: string]: string | string[]; } } {
     const headers = new HttpHeaders({
       //Authorization: `Bearer ${this.authService.accessToken}`,
@@ -35,11 +36,11 @@ export class ChatService {
   getChatUsers(currentUser: string) {
     var tmessages: ChatMessage[] = []
     this.chatUsers = [];
-    this.chatUsers.push(new ChatUser("bmhadhbi", 'assets/images/profile/user-1.jpg', 'Subject of Bechir'));
-    this.chatUsers.push(new ChatUser("mbechir", 'assets/images/profile/user-1.jpg', 'Subject of Mohamed'));
-    this.chatUsers.push(new ChatUser("Samir", 'assets/images/profile/user-1.jpg', 'Subject of Samir'));
-    this.chatUsers.push(new ChatUser("Lisa", 'assets/images/profile/user-1.jpg', 'Subject of Lisa'));
-    this.chatUsers.push(new ChatUser("Mariem", 'assets/images/profile/user-1.jpg', 'Subject of Mariem'));
+    this.chatUsers.push(new ChatUser("bmhadhbi", "Mohamed b", 'assets/images/profile/user-1.jpg', 'Subject of Bechir'));
+    this.chatUsers.push(new ChatUser("mbechir", "Mohamed Bechir MHADHBI", 'assets/images/profile/user-1.jpg', 'Subject of Mohamed'));
+    this.chatUsers.push(new ChatUser("Samir", "Samir", 'assets/images/profile/user-1.jpg', 'Subject of Samir'));
+    this.chatUsers.push(new ChatUser("Lisa", "Lisa", 'assets/images/profile/user-1.jpg', 'Subject of Lisa'));
+    this.chatUsers.push(new ChatUser("Paul", "Paul", 'assets/images/profile/user-1.jpg', 'Subject of Paul'));
     this.chatUsers = this.chatUsers.filter(x => x.from != currentUser);
   }
 
@@ -53,17 +54,23 @@ export class ChatService {
     //    new ChatMessage('even', 'Hi, I am fine and you ?', new Date()),
     //    new ChatMessage('odd', 'Thank you, I am fine too', new Date())
     //  ];
-    var message: Message = { from : from ,to:to, message:''}
+    var message: Message = { from: from, to: to, message: '' }
 
     return this.chatConnection?.invoke("LoadMessages", message);
-
   }
 
   registerUser<T>(user: User): Observable<T> {
     return this.http.post<T>(this.registerUserUrl + '/' + user.userName, JSON.stringify(user), this.requestHeaders);
   }
 
-  public createChatConnection() {
+  async disconnectUser(userName: string) {
+    return this.chatConnection?.invoke("RemoveUserConnection", userName)
+      .catch(error => {
+        alert(error.message);
+      });
+  }
+
+  public createChatConnection(userName: string) {
     this.chatConnection = new HubConnectionBuilder().withUrl("https://localhost:7217/hubs/chat", {
       skipNegotiation: true,
       transport: signalR.HttpTransportType.WebSockets
@@ -73,7 +80,7 @@ export class ChatService {
       alert(error.error);
     });
 
-    this.chatConnection.on("UserConnected", () => { this.addUserConnectionId(); });
+    this.chatConnection.on("UserConnected", () => { this.addUserConnectionId(userName); });
 
     this.chatConnection.on("onlineUsers", (onlineUsers) => {
       this.onlineUsers = [...onlineUsers];
@@ -102,8 +109,8 @@ export class ChatService {
     });
   }
 
-  async addUserConnectionId() {
-    return this.chatConnection?.invoke("AddUserConnectionId", "Bechir")
+  async addUserConnectionId(userName: string) {
+    return this.chatConnection?.invoke("AddUserConnectionId", userName)
       .catch(error => {
         alert(error.message);
       });

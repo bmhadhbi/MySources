@@ -2,53 +2,37 @@
   <div class="position-relative row w-100 h-100">
     <div class="col-lg-7 col-xl-8 bg-gredient p-0">
       <div class="p-24 h-100">
-        <a
-          [routerLink]="['/dashboards/dashboard1']"
-          *ngIf="options.theme === 'light'"
-        >
-          <img
-            src="./assets/images/logos/logo-dark.svg"
-            class="align-middle m-2"
-            alt="logo"
-          />
+        <a [routerLink]="['/dashboards/dashboard1']"
+           *ngIf="options.theme === 'light'">
+          <img src="./assets/images/logos/logo-dark.svg"
+               class="align-middle m-2"
+               alt="logo" />
         </a>
-        <a
-          [routerLink]="['/dashboards/dashboard1']"
-          *ngIf="options.theme === 'dark'"
-        >
-          <img
-            src="./assets/images/logos/logo-light.svg"
-            class="align-middle m-2"
-            alt="logo"
-          />
+        <a [routerLink]="['/dashboards/dashboard1']"
+           *ngIf="options.theme === 'dark'">
+          <img src="./assets/images/logos/logo-light.svg"
+               class="align-middle m-2"
+               alt="logo" />
         </a>
 
-        <div
-          class="align-items-center justify-content-center img-height d-none d-lg-flex"
-        >
-          <img
-            src="/assets/images/backgrounds/login-bg.svg"
-            alt="login"
-            style="width: 100%; max-width: 600px"
-          />
+        <div class="align-items-center justify-content-center img-height d-none d-lg-flex">
+          <img src="/assets/images/backgrounds/login-bg.svg"
+               alt="login"
+               style="width: 100%; max-width: 600px" />
         </div>
       </div>
     </div>
     <div class="col-lg-5 col-xl-4 p-0">
-      <div
-        class="p-32 d-flex align-items-start align-items-lg-center justify-content-center h-100"
-      >
+      <div class="p-32 d-flex align-items-start align-items-lg-center justify-content-center h-100">
         <div class="row justify-content-center w-100">
           <div class="col-lg-9 max-width-form">
             <h4 class="f-w-700 f-s-24 m-0">Welcome to My Application</h4>
-            <span class="d-block f-w-500 d-block m-t-10"
-              >Already have an Account?
-              <a
-                [routerLink]="['/authentication/login']"
-                class="text-decoration-none text-accent f-w-500 f-s-14"
-              >
-                Sign In</a
-              >
+            <span class="d-block f-w-500 d-block m-t-10">
+              Already have an Account?
+              <a [routerLink]="['/authentication/login']"
+                 class="text-decoration-none text-accent f-w-500 f-s-14">
+                Sign In
+              </a>
             </span>
 
             <form class="m-t-30" [formGroup]="form" (ngSubmit)="submit()">
@@ -61,16 +45,32 @@
                           class="m-b-16 error-msg">
                   <div class="text-error"
                        *ngIf="f['uname'].errors && f['uname'].errors['required']">
-                    Name is required.
+                    Login is required.
                   </div>
                   <div class="text-error"
                        *ngIf="f['uname'].errors && f['uname'].errors['minlength']">
+                    Login should be 6 character.
+                  </div>
+                </mat-hint>
+              </mat-form-field>
+              <mat-form-field appearance="outline"
+                              class="w-100"
+                              color="primary">
+                <mat-label>Name</mat-label>
+                <input matInput formControlName="name" />
+                <mat-hint *ngIf="f['name'].touched && f['name'].invalid"
+                          class="m-b-16 error-msg">
+                  <div class="text-error"
+                       *ngIf="f['name'].errors && f['name'].errors['required']">
+                    Name is required.
+                  </div>
+                  <div class="text-error"
+                       *ngIf="f['name'].errors && f['name'].errors['minlength']">
                     Name should be 6 character.
                   </div>
                 </mat-hint>
               </mat-form-field>
               <!-- email -->
-
               <mat-form-field appearance="outline"
                               class="w-100"
                               color="primary">
@@ -138,10 +138,8 @@
               <div class="col-12 m-b-24">
                 <button mat-stroked-button class="w-100">
                   <div class="d-flex align-items-center gap-6">
-                    <i-feather
-                      name="github"
-                      class="icon-18"
-                    ></i-feather>
+                    <i-feather name="github"
+                               class="icon-18"></i-feather>
                     Github
                   </div>
                 </button>
@@ -149,24 +147,18 @@
               <div class="col-12 col-sm-6">
                 <button mat-stroked-button class="w-100">
                   <div class="d-flex align-items-center gap-6">
-                    <i-feather
-                      name="facebook"
-                      class="icon-18 text-primary"
-                    ></i-feather>
+                    <i-feather name="facebook"
+                               class="icon-18 text-primary"></i-feather>
                     Facebook
                   </div>
                 </button>
               </div>
               <div class="col-12 col-sm-6">
-                <button
-                  mat-stroked-button
-                  class="w-100 d-flex align-items-center"
-                >
+                <button mat-stroked-button
+                        class="w-100 d-flex align-items-center">
                   <div class="d-flex align-items-center gap-6">
-                    <i-feather
-                      name="twitter"
-                      class="icon-18 text-accent"
-                    ></i-feather>
+                    <i-feather name="twitter"
+                               class="icon-18 text-accent"></i-feather>
                     Twitter
                   </div>
                 </button>

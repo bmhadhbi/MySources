@@ -21,8 +21,8 @@ namespace MyEFApi.Controllers
             {
                 return NoContent();
             }
-            return NoContent();
             return BadRequest("this name is taken");
         }
+
     }
 }

@@ -3,15 +3,18 @@ import { Message } from "./message.model";
 export class ChatUser {
   constructor(
     from: string,
+    name: string,
     photo: string,
     subject: string) {
     this.from = from;
+    this.name = name;
     this.photo = photo;
     this.subject = subject;
 
   }
 
   public from: string;
+  public name: string;
   public photo: string;
   public subject: string;
 }

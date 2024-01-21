@@ -41,7 +41,7 @@ export class AppChatComponent {
   isOver(): boolean {
     return window.matchMedia(`(max-width: 960px)`).matches;
   }
-    
+
   onSelect(user: ChatUser): void {
     this.selectedUser = user;
     this.chatService.getUserMessages(user.from, this.user.userName)
@@ -51,7 +51,7 @@ export class AppChatComponent {
 
   async ngOnInit() {
     this.user = JSON.parse(this.localService.getData(DBkeys.CurrentUser) ?? "");
-    this.user.fullName = this.user.userName;
+    //this.user.fullName = this.user.userName;
     this.user.jobTitle = "Développeur Informatique";
     this.chatService.getChatUsers(this.user.userName);
     this.selectedUser = this.chatService.chatUsers[0];
@@ -59,19 +59,23 @@ export class AppChatComponent {
       this.chatService.registerUser(this.user)
         .subscribe({
           next: () => {
-            this.chatService.createChatConnection();
+            this.chatService.createChatConnection(this.user.userName);
           },
           error: error => { this.openDialog('0ms', '0ms', 'Error!', error.error, 'Ok', '') }
         });
-    }   
+    }
   }
 
   search() {
     this.chatService.getChatUsers(this.user.userName);
     this.chatService.chatUsers = this.chatService.chatUsers.filter(x => x.from.toLowerCase().includes(this.serachText.toLowerCase()));
-    var defaultUser: ChatUser = {from:'',photo:'',subject:''};
+    var defaultUser: ChatUser = { from: '', name: '', photo: '', subject: '' };
     this.selectedUser = this.chatService.chatUsers.length > 0 ? this.chatService.chatUsers[0] : defaultUser;
     this.chatService.getUserMessages(this.selectedUser.from, this.user.userName)
+  }
+
+  substring(value: string) {
+    return value.substring(0, 17);
   }
 
   isOnline(user) {
