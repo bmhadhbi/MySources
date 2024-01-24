@@ -53,8 +53,18 @@ export class AppChatComponent {
     this.user = JSON.parse(this.localService.getData(DBkeys.CurrentUser) ?? "");
     //this.user.fullName = this.user.userName;
     this.user.jobTitle = "Développeur Informatique";
-    this.chatService.getChatUsers(this.user.userName);
-    this.selectedUser = this.chatService.chatUsers[0];
+    var users = await this.chatService.getChatUsers(this.user.userName).subscribe({
+      next: (users) => {
+        this.chatService.chatUsers = [];
+        users.forEach(x => {
+          if (x.userName.toLowerCase() != this.user.userName.toLowerCase())
+            this.chatService.chatUsers.push(new ChatUser(x.userName, x.fullName, 'assets/images/profile/user-1.jpg', 'Subject of ' + x.userName));
+          this.selectedUser = this.chatService.chatUsers[0];
+        });
+      },
+      error: error => { }
+    });
+
     if (this.user != "") {
       this.chatService.registerUser(this.user)
         .subscribe({

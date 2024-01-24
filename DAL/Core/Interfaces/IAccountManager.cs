@@ -65,5 +65,7 @@ namespace DAL.Core.Interfaces
         Task<bool> IsEmailConfirmedAsync(ApplicationUser user);
 
         Task<(bool, ApplicationUser?)> LoginWithPassword(string login, string password);
+
+        Task<List<ApplicationUser>> GetUsersAsync(int page, int pageSize);
     }
 }

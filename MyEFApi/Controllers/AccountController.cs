@@ -60,6 +60,23 @@ namespace MyEFApi.Controllers
         {
         }
 
+        [HttpGet("users")]
+        [ProducesResponseType(200, Type = typeof(List<UserBaseRequest>))]
+        public async Task<IActionResult> GetUsers()
+        {
+            return await GetUsers(-1, -1);
+        }
+
+        [HttpGet("users/{pageNumber:int}/{pageSize:int}")]
+        [ProducesResponseType(200, Type = typeof(List<UserBaseRequest>))]
+        public async Task<IActionResult> GetUsers(int pageNumber, int pageSize)
+        {
+            var users = await _accountManager.GetUsersAsync(pageNumber, pageSize);
+            var usersVM = _mapper.Map<List<UserRequest>>(users);
+
+            return Ok(usersVM);
+        }
+
         [HttpPost("login")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]

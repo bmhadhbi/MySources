@@ -400,5 +400,20 @@ namespace DAL.Core
 
             return (await _userManager.CheckPasswordAsync(user, password), user);
         }
+
+        public async Task<List<ApplicationUser>> GetUsersAsync(int page, int pageSize)
+        {
+            IQueryable<ApplicationUser> usersQuery = _context.Users;
+
+            if (page != -1)
+                usersQuery = usersQuery.Skip((page - 1) * pageSize);
+
+            if (pageSize != -1)
+                usersQuery = usersQuery.Take(pageSize);
+
+            var users = await usersQuery.ToListAsync();
+
+            return users;
+        }
     }
 }

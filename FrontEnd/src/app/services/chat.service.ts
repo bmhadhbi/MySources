@@ -13,6 +13,7 @@ import { Message } from '../models/chat/message.model';
 export class ChatService {
   get registerUserUrl() { return 'https://localhost:7217/api/chat/register-user'; }
   get removeUserUrl() { return 'https://localhost:7217/api/chat/remove-user'; }
+  get getUsersUrl() { return 'https://localhost:7217/api/account/users'; }
   protected get requestHeaders(): { headers: HttpHeaders | { [header: string]: string | string[]; } } {
     const headers = new HttpHeaders({
       //Authorization: `Bearer ${this.authService.accessToken}`,
@@ -34,14 +35,9 @@ export class ChatService {
   }
 
   getChatUsers(currentUser: string) {
-    var tmessages: ChatMessage[] = []
-    this.chatUsers = [];
-    this.chatUsers.push(new ChatUser("bmhadhbi", "Mohamed b", 'assets/images/profile/user-1.jpg', 'Subject of Bechir'));
-    this.chatUsers.push(new ChatUser("mbechir", "Mohamed Bechir MHADHBI", 'assets/images/profile/user-1.jpg', 'Subject of Mohamed'));
-    this.chatUsers.push(new ChatUser("Samir", "Samir", 'assets/images/profile/user-1.jpg', 'Subject of Samir'));
-    this.chatUsers.push(new ChatUser("Lisa", "Lisa", 'assets/images/profile/user-1.jpg', 'Subject of Lisa'));
-    this.chatUsers.push(new ChatUser("Paul", "Paul", 'assets/images/profile/user-1.jpg', 'Subject of Paul'));
-    this.chatUsers = this.chatUsers.filter(x => x.from != currentUser);
+    const endpointUrl = `${this.getUsersUrl}`;
+    return this.http.get<User[]>(endpointUrl, this.requestHeaders);
+   
   }
 
   getUserMessages(from: string, to: string) {
