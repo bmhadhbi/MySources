@@ -60,7 +60,7 @@
                          lines="2">
             <div class="d-flex align-items-center p-x-16 p-b-4 h-100"
                  matListItemTitle>
-              <img src="{{ user?.photo }}"
+              <img src="{{ user.photo }}"
                    alt=""
                    width="42"
                    class="rounded-circle" />
@@ -68,7 +68,7 @@
                 <h3 class="f-w-600 mat-subtitle-1 f-s-16 lh-sm">
                   {{ substring(user.name) }}
                 </h3>
-                <p class="f-s-14 m-t-4 m-b-0">{{ user?.subject }}</p>
+                <p class="f-s-14 m-t-4 m-b-0">{{ user.subject }}</p>
               </div>           
               <div style="width:80px;"></div>
               <mat-icon *ngIf="isOnline(user.from)" align="right" class="material-icons color_green">account_circle</mat-icon>
@@ -86,11 +86,11 @@
         <mat-icon>short_text</mat-icon>
       </button>
       <div class="d-flex align-items-center">
-        <img src="{{ selectedUser?.photo }}"
+        <img src="{{ selectedUser.photo }}"
              width="40"
              class="rounded-circle" />
         <div class="mat-subtitle-1 f-s-16 f-w-600 m-b-0 m-l-16">
-          {{ selectedUser?.name }}
+          {{ selectedUser.name }}
         </div>
       </div>
       <button [matMenuTriggerFor]="moredd" class="m-l-auto" mat-icon-button>
@@ -108,15 +108,14 @@
     <!-- ------------------------------------------- -->
     <ng-scrollbar style="height: calc(100vh - 390px)"
                   class="position-relative">
-      <mat-card-content class="chat-middle-box p-24">
+      <mat-card-content class="chat-middle-box p-24">        
         <ng-container *ngFor="let c of chatService.currentUserMessages">
-          <!--<ng-container *ngFor="let c of selectedMessage">     -->
-          <ng-template [ngIf]="selectedUser?.from === c.msg.from" [ngIfElse]="evenblock">
+          <ng-template [ngIf]="selectedUser.from === c.msg.from && user.userName === c.msg.to">
             <div class="chat-list odd">
               <div class="chat-message m-b-15">
                 <div class="chat-block bg-gray100 p-10 rounded d-flex align-items-center">
                   <span>
-                    <img src="{{ selectedUser?.photo }}"
+                    <img src="{{ selectedUser.photo }}"
                          class="rounded-circle"
                          width="40" />
                   </span>
@@ -125,19 +124,19 @@
                   </span>
                 </div>
                 <p class="chat-date text-muted mat-h5 f-s-12 m-t-5 m-b-0">
-                  {{ c?.date | date }}
+                  {{ c.date | date }}
                 </p>
               </div>
             </div>
           </ng-template>
-          <ng-template #evenblock>
+          <ng-template [ngIf]="selectedUser.from === c.msg.to && user.userName === c.msg.from">
             <div class="chat-list even">
               <div class="chat-message m-b-15">
                 <div class="chat-block bg-light-accent lh-md p-10 rounded d-flex align-items-center mat-subheading-1 f-w-400 m-b-0">
                   {{ c.msg.message }}
                 </div>
                 <p class="chat-date text-muted mat-h5 m-0">
-                  {{ c?.date | date }}
+                  {{ c.date | date }}
                 </p>
               </div>
             </div>

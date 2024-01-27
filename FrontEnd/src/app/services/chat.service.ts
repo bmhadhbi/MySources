@@ -14,6 +14,8 @@ export class ChatService {
   get registerUserUrl() { return 'https://localhost:7217/api/chat/register-user'; }
   get removeUserUrl() { return 'https://localhost:7217/api/chat/remove-user'; }
   get getUsersUrl() { return 'https://localhost:7217/api/account/users'; }
+  get saveChatMessageUrl() { return 'https://localhost:7217/api/chat/save-chat-message'; }
+  get loadConversationUrl() { return 'https://localhost:7217/api/chat/load-conversation'; }
   protected get requestHeaders(): { headers: HttpHeaders | { [header: string]: string | string[]; } } {
     const headers = new HttpHeaders({
       //Authorization: `Bearer ${this.authService.accessToken}`,
@@ -37,7 +39,6 @@ export class ChatService {
   getChatUsers(currentUser: string) {
     const endpointUrl = `${this.getUsersUrl}`;
     return this.http.get<User[]>(endpointUrl, this.requestHeaders);
-   
   }
 
   getUserMessages(from: string, to: string) {
@@ -87,15 +88,46 @@ export class ChatService {
         type: '',
         date: new Date(),
         msg: message
-      };
-      this.selectedUserMessages.push(msg);
-      this.currentUserMessages = [...this.selectedUserMessages].filter(x => (x.msg.from == message.from && x.msg.to == message.to)
-        || (x.msg.to == message.from && x.msg.from == message.to));
+      }; 
+      this.currentUserMessages.push(msg);   
+      //this.currentUserMessages = [...this.selectedUserMessages].filter(x => (x.msg.from == message.from && x.msg.to == message.to)
+      //  || (x.msg.to == message.from && x.msg.from == message.to));
+     
     });
 
-    this.chatConnection.on("LoadMessages", (message) => {
-      this.currentUserMessages = [...this.selectedUserMessages].filter(x => (x.msg.from == message.from && x.msg.to == message.to)
-        || (x.msg.to == message.from && x.msg.from == message.to));
+    this.chatConnection.on("LoadMessages", (users) => {
+
+      this.loadCurrentConversation(users.from, users.to)
+
+      this.currentUserMessages = [...this.selectedUserMessages].filter(x => (x.msg.from == users.from && x.msg.to == users.to)
+        || (x.msg.to == users.from && x.msg.from == users.to));
+    });
+  }
+
+  loadCurrentConversation(from:string, to:string) {
+    this.http.get<Message[]>(this.loadConversationUrl + "/" + from + "/" + to, this.requestHeaders).subscribe({
+      next: result => {
+        this.currentUserMessages = result.map(x => <ChatMessage>{
+          date: new Date(),
+          type: '',
+          msg: {
+            from: x.from,
+            to: x.to,
+            message: x.message
+          }
+        });
+      },
+      error: error => { alert(error); }
+    });
+  }
+
+  saveChatMessage(from: string, to: string, message: string) {
+    var tmessage: Message = { from: from, to: to, message: message }
+    this.http.post(this.saveChatMessageUrl, JSON.stringify(tmessage), this.requestHeaders).subscribe({
+      next: _ => {
+        //this.loadCurrentConversation(from, message)
+      },
+      error: error => { alert(error); }
     });
   }
 

@@ -1,4 +1,6 @@
+using DAL.service.interfaces;
 using Microsoft.AspNetCore.Mvc;
+using MyEFApi.Dtos;
 using MyEFApi.Services;
 
 namespace MyEFApi.Controllers
@@ -8,10 +10,12 @@ namespace MyEFApi.Controllers
     public class ChatController : ControllerBase
     {
         private readonly ChatService _chatService;
+        private readonly IChatService _chatDbService;
 
-        public ChatController(ChatService chatService)
+        public ChatController(ChatService chatService, IChatService chatDbService)
         {
             _chatService = chatService;
+            _chatDbService = chatDbService;
         }
 
         [HttpPost("register-user/{name}")]
@@ -22,7 +26,20 @@ namespace MyEFApi.Controllers
                 return NoContent();
             }
             return NoContent();
-            return BadRequest("this name is taken");
+        }
+
+        [HttpPost("save-chat-message")]
+        public async Task<IActionResult> AddChatMessage([FromBody] ChatMessageRequest request)
+        {
+            await _chatDbService.AddChatMessage(request.From, request.To, request.Message, DateTime.Now);
+            return Ok();
+        }
+
+        [HttpGet("load-conversation/{from}/{to}")]
+        public async Task<IActionResult> loadConversation([FromRoute] string from, string to)
+        {
+            var conversation = await _chatDbService.LoadConversation(from, to);
+            return Ok(conversation);
         }
     }
 }

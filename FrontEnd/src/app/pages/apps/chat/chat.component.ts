@@ -25,14 +25,9 @@ export class AppChatComponent {
   chatUsers: ChatUser[];
   serachText: string = '';
 
-  public messages: Array<any> = [];// messages;
-  // tslint:disable-next-line - Disables all
-  // messages: Object[] = messages;
-
   constructor(public chatService: ChatService,
     private localService: LocalService,
     public dialog: MatDialog) {
-    this.selectedMessage = this.messages[0];
   }
 
   @ViewChild('myInput', { static: true }) myInput: ElementRef =
@@ -43,23 +38,20 @@ export class AppChatComponent {
   }
 
   onSelect(user: ChatUser): void {
-    this.selectedUser = user;
-    this.chatService.getUserMessages(user.from, this.user.userName)
-
-    this.selectedMessage = messages[0];
+    this.selectedUser = user;  
+    this.chatService.getUserMessages(user.from, this.user.userName);
   }
 
   async ngOnInit() {
     this.user = JSON.parse(this.localService.getData(DBkeys.CurrentUser) ?? "");
-    //this.user.fullName = this.user.userName;
-    this.user.jobTitle = "Développeur Informatique";
-    var users = await this.chatService.getChatUsers(this.user.userName).subscribe({
+    await this.chatService.getChatUsers(this.user.userName).subscribe({
       next: (users) => {
         this.chatService.chatUsers = [];
         users.forEach(x => {
           if (x.userName.toLowerCase() != this.user.userName.toLowerCase())
             this.chatService.chatUsers.push(new ChatUser(x.userName, x.fullName, 'assets/images/profile/user-1.jpg', 'Subject of ' + x.userName));
           this.selectedUser = this.chatService.chatUsers[0];
+          this.chatService.loadCurrentConversation(this.user.userName, this.selectedUser.from);
         });
       },
       error: error => { }
@@ -102,6 +94,7 @@ export class AppChatComponent {
       //  date: new Date(),
       //});
       this.chatService.sendMessage(this.user.userName, this.selectedUser.from, this.msg);
+      this.chatService.saveChatMessage(this.user.userName, this.selectedUser.from, this.msg);
     }
 
     this.myInput.nativeElement.value = '';

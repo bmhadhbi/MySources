@@ -2,6 +2,8 @@ using DAL;
 using DAL.Core;
 using DAL.Core.Interfaces;
 using DAL.Models;
+using DAL.service;
+using DAL.service.interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MyEFApi.Helpers;
@@ -60,6 +62,7 @@ static void ConfigureServices(WebApplicationBuilder builder)
     builder.Services.AddScoped<IEmailSender, EmailSender>();
 
     builder.Services.AddScoped<IAccountManager, AccountManager>();
+    builder.Services.AddScoped<IChatService, ChatDbService>();
     builder.Services.AddHttpContextAccessor();
     builder.Services.AddSingleton<ChatService>();
     builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

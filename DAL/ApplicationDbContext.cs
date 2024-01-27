@@ -25,6 +25,7 @@ namespace DAL
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
         public DbSet<ApplicationRole> ApplicationRole { get; set; }
         public DbSet<IdentityRoleClaim<string>> IdentityRoleClaim { get; set; }
+        public DbSet<ChatMessage> ChatMessage { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
